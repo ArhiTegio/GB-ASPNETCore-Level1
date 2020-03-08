@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Employee>
+﻿@model IEnumerable<KeyValuePair<int, Employee>>
 
 @{
     //ViewData["Title"] = "Сотрудники";
@@ -25,13 +25,13 @@
             @foreach (var employee in Model)
             {
                 <tr>
-                    <td>@employee.Id</td>
-                    <td>@employee.SurName</td>
-                    <td>@employee.FirstName</td>
-                    <td>@employee.Patronymic</td>
-                    <td>@employee.Age</td>
+                    <td>@employee.Value.Id</td>
+                    <td>@employee.Value.SurName</td>
+                    <td>@employee.Value.FirstName</td>
+                    <td>@employee.Value.Patronymic</td>
+                    <td>@employee.Value.Age</td>
                     <td>
-                        <a asp-controller="Employees" asp-action="Details" asp-route-Id="@employee.Id">Карточка</a>
+                        <a asp-controller="Employees" asp-action="Details" asp-route-Id="@employee.Value.Id">Карточка</a>
                     </td>
                 </tr>
             }

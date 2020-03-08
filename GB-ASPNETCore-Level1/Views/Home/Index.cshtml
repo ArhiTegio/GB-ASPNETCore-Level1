@@ -1,4 +1,5 @@
-﻿
+﻿@model ModelProductDetal
+
 <partial name="Partial/_Slider" />
 
 <section>
@@ -13,9 +14,9 @@
               
                 <partial name="Partial/_FeaturesItems"/>
 
-                <partial name="Partial/_CategoryTab"/>
+                <partial name="Partial/_CategoryTab" model="Model"/>
 
-                <partial name="Partial/_RecomendedItems"/>
+                <partial name="Partial/_RecomendedItems" model="Model"/>
             </div>
         </div>
     </div>

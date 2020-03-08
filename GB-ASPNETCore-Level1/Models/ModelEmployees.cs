@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static AllRussianName.Russian;
 
 namespace WebStore.Models
 {
-    public static class ModelEmployees
+    public class ModelEmployees
     {
         private static Random random = new Random();
-        private static string[] allName;
-        private static string[] allSurname;
+        private static string[] allName = GetManNames();
+        private static string[] allSurname = GetManSurname();
 
-        public static readonly List<Emploee> _emploees = new List<Emploee>();
+        public static readonly Dictionary<int, Employee> _employees = new Dictionary<int, Employee>();
+
         static ModelEmployees()
         {
-
-            _emploees.Clear();
+            _employees.Clear();
             var year = DateTime.Now.Year;
             var coutEmploee = random.Next(30, 100);
             for (int i = 0; i < coutEmploee; i++)
-                _emploees.Add(new Emploee(i, allName[random.Next(0, allName.Length - 1)],
+                _employees.Add(i, new Employee(i, allName[random.Next(0, allName.Length - 1)],
                     allSurname[random.Next(0, allSurname.Length - 1)],
                     $"{allName[random.Next(0, allName.Length - 1)]}ович", 
                     random.Next(18, 65), 

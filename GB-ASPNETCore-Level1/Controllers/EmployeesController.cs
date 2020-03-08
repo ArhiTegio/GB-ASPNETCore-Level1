@@ -9,42 +9,10 @@ namespace WebStore.Controllers
 {
     public class EmployeesController : Controller
     {
-        private static readonly List<Employee> __Employees = new List<Employee>
-        {
-            new Employee
-            {
-                Id = 1,
-                SurName = "Иванов",
-                FirstName = "Иван",
-                Patronymic = "Иванович",
-                Age = 39
-            },
-            new Employee
-            {
-                Id = 2,
-                SurName = "Петров",
-                FirstName = "Пётр",
-                Patronymic = "Петрович",
-                Age = 18
-            },
-            new Employee
-            {
-                Id = 3,
-                SurName = "Сидоров",
-                FirstName = "Сидор",
-                Patronymic = "Сидорович",
-                Age = 27
-            },
-        };
+        private static readonly ModelEmployees __Employees = new ModelEmployees();
 
-        public IActionResult Index() => View(__Employees);
+        public IActionResult Index() => View(ModelEmployees._employees);
 
-        public IActionResult Details(int Id)
-        {
-            var employee = __Employees.FirstOrDefault(e => e.Id == Id);
-            if (employee is null)
-                return NotFound();
-            return View(employee);
-        }
+        public IActionResult Details(int Id) => ModelEmployees._employees.TryGetValue(Id, out var employee) ? View(employee) : (IActionResult)NotFound();
     }
 }
