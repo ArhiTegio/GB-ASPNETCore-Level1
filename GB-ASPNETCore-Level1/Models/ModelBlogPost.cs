@@ -6,7 +6,17 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace WebStore.Models
 {
-    public class ModelBlogPost
+    public interface IModelBlogPost
+    {
+        string Title { get; set; }
+        string User { get; set; }
+        string Clock { get; set; }
+        string Date { get; set; }
+        string Pic { get; set; }
+        string Context { get; set; }
+    }
+
+    public class ModelBlogPost : IModelBlogPost
     {
         public string Title { get; set; }
         public string User { get; set; }

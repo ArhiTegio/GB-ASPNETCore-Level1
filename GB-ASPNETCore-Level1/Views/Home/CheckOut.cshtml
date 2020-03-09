@@ -1,109 +1,17 @@
-﻿<section id="cart_items">
+﻿@model ModelCart
+
+<section id="cart_items">
     <div class="container">
-        <div class="breadcrumbs">
-            <ol class="breadcrumb">
-                <li><a href="#">Домашная страница</a></li>
-                <li class="active">Проверка пользователя</li>
-            </ol>
-        </div><!--/breadcrums-->
+        <partial name="Partial/_Breadcrums" />
 
         <div class="step-one">
             <h2 class="heading">Шаг 1</h2>
         </div>
-        <div class="checkout-options">
-            <h3>Новый пользователь</h3>
-            <p>Опции проверки</p>
-            <ul class="nav">
-                <li>
-                    <label><input type="checkbox"> Зарегистрировать учетную запись</label>
-                </li>
-                <li>
-                    <label><input type="checkbox"> Проверка при входе</label>
-                </li>
-                <li>
-                    <a href=""><i class="fa fa-times"></i>Отменить</a>
-                </li>
-            </ul>
-        </div><!--/checkout-options-->
+        <partial name="Partial/_CheckoutOptions" />
 
-        <div class="register-req">
-            <p>Пожалуйста, используйте Зарегистрированную учетную запись и Проверки входа, чтобы легко получить доступ к истории ваших заказов, или используйте проверки в качестве индентификации</p>
-        </div><!--/register-req-->
+        <partial name="Partial/_RegisterReq" />
 
-        <div class="shopper-informations">
-            <div class="row">
-                <div class="col-sm-3">
-                    <div class="shopper-info">
-                        <p>Информация для входа в свою учетную запись</p>
-                        <form>
-                            <input type="text" placeholder="Отображаемое имя">
-                            <input type="text" placeholder="Имя пользователя">
-                            <input type="password" placeholder="Password">
-                            <input type="password" placeholder="Подтверждение пароля">
-                        </form>
-                        <a class="btn btn-primary" href="">Сбросить</a>
-                        <a class="btn btn-primary" href="">Продолжить</a>
-                    </div>
-                </div>
-                <div class="col-sm-5 clearfix">
-                    <div class="bill-to">
-                        <p>Личная информация</p>
-                        <div class="form-one">
-                            <form>
-                                <input type="text" placeholder="Название компания">
-                                <input type="text" placeholder="Емайл*">
-                                <input type="text" placeholder="Название">
-                                <input type="text" placeholder="Фамилия *">
-                                <input type="text" placeholder="Имя">
-                                <input type="text" placeholder="Отчество *">
-                                <input type="text" placeholder="Адрес 1 *">
-                                <input type="text" placeholder="Адрес 2">
-                            </form>
-                        </div>
-                        <div class="form-two">
-                            <form>
-                                <input type="text" placeholder="Почтовый Индекс *">
-                                <select>
-                                    <option>-- Страна --</option>
-                                    <option>Россия</option>
-                                    <option>United States</option>
-                                    <option>Bangladesh</option>
-                                    <option>UK</option>
-                                    <option>India</option>
-                                    <option>Pakistan</option>
-                                    <option>Ucrane</option>
-                                    <option>Canada</option>
-                                    <option>Dubai</option>
-                                </select>
-                                <select>
-                                    <option>-- Государство / Область / Район --</option>
-                                    <option>Россия</option>
-                                    <option>United States</option>
-                                    <option>Bangladesh</option>
-                                    <option>UK</option>
-                                    <option>India</option>
-                                    <option>Pakistan</option>
-                                    <option>Ucrane</option>
-                                    <option>Canada</option>
-                                    <option>Dubai</option>
-                                </select>
-                                <input type="password" placeholder="Подтверждение пароля">
-                                <input type="text" placeholder="Телефон *">
-                                <input type="text" placeholder="Мобильный телефон">
-                                <input type="text" placeholder="Факс">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="order-message">
-                        <p>Параметры для доставки</p>
-                        <textarea name="message" placeholder="Примечания о вашем заказе, специальные примечания для доставки" rows="16"></textarea>
-                        <label><input type="checkbox"> Доставка будет производиться по адресу</label>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <partial name="Partial/_ShopperInformations" />
         <div class="review-payment">
             <h2>Обзор и Оплата</h2>
         </div>
@@ -121,16 +29,18 @@
                     </tr>
                 </thead>
                 <tbody>
+                @foreach (var item in Model.ItemInCart)
+                {
                     <tr>
                         <td class="cart_product">
-                            <a href=""><img src="~/images/cart/one.png" alt=""></a>
+                            <a href=""><img src="~/images/cart/@item.Pic" alt=""></a>
                         </td>
                         <td class="cart_description">
-                            <h4><a href="">Colorblock Scuba</a></h4>
-                            <p>Индентификатор: 1089772</p>
+                            <h4><a href="">@item.Name</a></h4>
+                            <p>Индентификатор: @item.ID</p>
                         </td>
                         <td class="cart_price">
-                            <p>$59</p>
+                            <p>@item.Priсe</p>
                         </td>
                         <td class="cart_Количество">
                             <div class="cart_Количество_button">
@@ -140,63 +50,14 @@
                             </div>
                         </td>
                         <td class="cart_total">
-                            <p class="cart_total_price">$59</p>
+                            <p class="cart_total_price">@item.Priсe</p>
                         </td>
                         <td class="cart_delete">
                             <a class="cart_Количество_delete" href=""><i class="fa fa-times"></i></a>
                         </td>
                     </tr>
-
-                    <tr>
-                        <td class="cart_product">
-                            <a href=""><img src="~/images/cart/two.png" alt=""></a>
-                        </td>
-                        <td class="cart_description">
-                            <h4><a href="">Colorblock Scuba</a></h4>
-                            <p>Индентификатор: 1089772</p>
-                        </td>
-                        <td class="cart_price">
-                            <p>$59</p>
-                        </td>
-                        <td class="cart_Количество">
-                            <div class="cart_Количество_button">
-                                <a class="cart_Количество_up" href=""> + </a>
-                                <input class="cart_Количество_input" type="text" name="Количество" value="1" autocomplete="off" size="2">
-                                <a class="cart_Количество_down" href=""> - </a>
-                            </div>
-                        </td>
-                        <td class="cart_total">
-                            <p class="cart_total_price">$59</p>
-                        </td>
-                        <td class="cart_delete">
-                            <a class="cart_Количество_delete" href=""><i class="fa fa-times"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="cart_product">
-                            <a href=""><img src="~/images/cart/three.png" alt=""></a>
-                        </td>
-                        <td class="cart_description">
-                            <h4><a href="">Colorblock Scuba</a></h4>
-                            <p>Индентификатор: 1089772</p>
-                        </td>
-                        <td class="cart_price">
-                            <p>$59</p>
-                        </td>
-                        <td class="cart_Количество">
-                            <div class="cart_Количество_button">
-                                <a class="cart_Количество_up" href=""> + </a>
-                                <input class="cart_Количество_input" type="text" name="Количество" value="1" autocomplete="off" size="2">
-                                <a class="cart_Количество_down" href=""> - </a>
-                            </div>
-                        </td>
-                        <td class="cart_total">
-                            <p class="cart_total_price">$59</p>
-                        </td>
-                        <td class="cart_delete">
-                            <a class="cart_Количество_delete" href=""><i class="fa fa-times"></i></a>
-                        </td>
-                    </tr>
+                }
+                    
                     <tr>
                         <td colspan="4">&nbsp;</td>
                         <td colspan="2">

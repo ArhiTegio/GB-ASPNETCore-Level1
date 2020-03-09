@@ -27,5 +27,21 @@ namespace WebStore.Models
             new ModelShopProduct("recommend2.jpg","Легкое поло черного цвета", "$56"),
             new ModelShopProduct("recommend3.jpg","Легкое поло черного цвета", "$56"),
         };
+
+        public ModelShopProduct[] product = new ModelShopProduct[]
+        {
+            new ModelShopProduct("product12.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product11.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product10.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product9.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product8.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product7.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product6.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product5.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product4.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product3.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product2.jpg","Легкое поло черного цвета", "$56"),
+            new ModelShopProduct("product1.jpg","Легкое поло черного цвета", "$56"),
+        };
     }
 }
