@@ -1,36 +1,88 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebStore.Models;
+
 
 namespace WebStore.Controllers
 {
     public class HomeController : Controller
     {
-
-        public IActionResult Index()
+        private ModelBlogPost[] blogPost = new ModelBlogPost[]
         {
-            //return Content("Home controllers - action Index");
-            return View();
-        }
+            new ModelBlogPost("Розовые футболки для девушек прибыли в магазин", "Mac Doe", "13:33", "ДЕК 5, 2013", "blog-one.jpg", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." ),
+            new ModelBlogPost("Розовые футболки для девушек прибыли в магазин", "Mac Doe", "13:33", "ДЕК 5, 2013", "blog-two.jpg", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." ),
+            new ModelBlogPost("Розовые футболки для девушек прибыли в магазин", "Mac Doe", "13:33", "ДЕК 5, 2013", "blog-three.jpg", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." ),
+        };
 
-        public IActionResult SomeAction()
-        {
-            //return Content("Home controllers - action SomeAction");
-            return View();
-        }
+        private ModelProductDetal modelProductDetal = new ModelProductDetal();
 
-        public IActionResult Emploees()
+        ModelBlogSingle modelBlogSingle = new ModelBlogSingle(new BlogPostArea("Девушки розовая футболка прибыла в магазин", "Mac Doe", "13:33", "ДЕК 5, 2013", "blog-one.jpg", new string[]
         {
-            return View(ModelEmployees._emploees);
-        }
+            "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+            "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+            "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
+            "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
+        }),
+            new ModelBlogPost("", "Annie Davis", "13:33", "ДЕК 5, 2013", "man-one.jpg", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."), 
+            new ModelBlogPost[]
+            {
+                new ModelBlogPost("", "Janis Gallagher", "13:33", "ДЕК 5, 2013", "man-two.jpg", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
+                new ModelBlogPost("", "Janis Gallagher", "13:33", "ДЕК 5, 2013", "man-three.jpg", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
+                new ModelBlogPost("", "Janis Gallagher", "13:33", "ДЕК 5, 2013", "man-four.jpg", "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
+            },
+            "socials.png",
+            new Tag(new []{ "Розовый", "Майка", "Девушкам" }, "(6 голосов)")
+        );
 
-        public IActionResult Employee(int id)
+        private ModelCart modelCart = new ModelCart(new Item[]
         {
-            var employee = ModelEmployees._emploees.FirstOrDefault(e => e.Id == id);
-            return employee is null? (IActionResult)NotFound() : View(employee);
-        }
+            new Item("Colorblock Scuba", "1089772", "$59", "one.png"),
+            new Item("Colorblock Scuba", "1089772", "$59", "two.png"),
+            new Item("Colorblock Scuba", "1089772", "$59", "three.png"),
+        },
+            new string[]
+            {
+                "Россия",
+                "United States",
+                "Bangladesh",
+                "UK",
+                "India",
+                "Pakistan",
+                "Ucrane",
+                "Canada",
+                "Dubai"
+            },
+            new string[]
+            {
+                "Москва",
+                "Dhaka",
+                "London",
+                "Dillih",
+                "Lahore",
+                "Alaska",
+                "Canada",
+                "Dubai"
+            });
+
+        public IActionResult Index() => View(modelProductDetal);
+
+        public IActionResult SomeAction() => View();
+
+        public IActionResult Error404() => View();
+
+        public IActionResult Blog() => View(blogPost);
+
+        public IActionResult BlogSingle() => View(modelBlogSingle);
+
+        public IActionResult Cart() => View(modelCart);
+
+        public IActionResult CheckOut() => View(modelCart);
+
+        public IActionResult ContactUs() => View();
+
+        public IActionResult Login() => View();
+
+        public IActionResult Shop() => View(modelProductDetal);
+
+        public IActionResult ProductDetails() => View(modelProductDetal);
     }
 }

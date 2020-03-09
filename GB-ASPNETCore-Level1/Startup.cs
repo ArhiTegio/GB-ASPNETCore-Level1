@@ -5,16 +5,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace WebStore  
+namespace WebStore
 {
     public class Startup
     {
         private IConfiguration Configuration { get; }
+
         public Startup(IConfiguration Configuration) => this.Configuration = Configuration;
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -22,10 +23,10 @@ namespace WebStore
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
 
             app.UseStaticFiles();
-
             app.UseDefaultFiles();
 
             app.UseRouting();
@@ -38,8 +39,8 @@ namespace WebStore
                 });
 
                 endpoints.MapControllerRoute(
-                    "default", 
-                    "{controller=Home}/{action=Index}/{id?}");
+                    name: "default", 
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
