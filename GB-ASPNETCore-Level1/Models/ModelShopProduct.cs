@@ -11,6 +11,8 @@ namespace WebStore.Models
         public string Name { get; set; }
         public string Price { get; set; }
 
+        public ModelShopProduct() { }
+
         public ModelShopProduct(string pic, string name, string price)
         {
             Pic = pic;

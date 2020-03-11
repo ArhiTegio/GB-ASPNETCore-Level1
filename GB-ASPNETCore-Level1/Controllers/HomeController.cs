@@ -42,25 +42,25 @@ namespace WebStore.Controllers
             new string[]
             {
                 "Россия",
-                "United States",
-                "Bangladesh",
-                "UK",
-                "India",
-                "Pakistan",
-                "Ucrane",
-                "Canada",
-                "Dubai"
+                "Соединенные Штаты",
+                "Бангладеш",
+                "Великобритания",
+                "Индия",
+                "Пакистан",
+                "Украина",
+                "Канада",
+                "Дубай"
             },
             new string[]
             {
                 "Москва",
-                "Dhaka",
-                "London",
-                "Dillih",
-                "Lahore",
-                "Alaska",
-                "Canada",
-                "Dubai"
+                "Дакка",
+                "Лондон",
+                "Дили",
+                "Лахор",
+                "Аляска",
+                "Канада",
+                "Дубай"
             });
 
         public IActionResult Index() => View(modelProductDetal);
