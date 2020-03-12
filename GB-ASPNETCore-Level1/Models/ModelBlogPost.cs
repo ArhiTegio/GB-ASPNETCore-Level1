@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using WebStore.Interface;
+using WebStore.Infrastructure.Interfaces;
 
 namespace WebStore.Models
 {

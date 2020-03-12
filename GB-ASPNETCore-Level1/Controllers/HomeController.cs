@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using WebStore.Models;
 
 
@@ -64,6 +65,8 @@ namespace WebStore.Controllers
             });
 
         public IActionResult Index() => View(modelProductDetal);
+
+        public IActionResult Throw(string id) => throw new ApplicationException(id);
 
         public IActionResult SomeAction() => View();
 

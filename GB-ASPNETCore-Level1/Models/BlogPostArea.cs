@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebStore.Interface;
+using WebStore.Infrastructure.Interfaces;
 
 namespace WebStore.Models
 {
