@@ -15,6 +15,8 @@ namespace WebStore.Models
 
         public Tag TagItem { get; set; }
 
+        public ModelBlogSingle() { }
+
         public ModelBlogSingle(BlogPostArea blog, ModelBlogPost comment, ModelBlogPost[] comments, string picSocialshare, Tag tag)
         {
             Blog_PostArea = blog;
@@ -22,39 +24,6 @@ namespace WebStore.Models
             PicSocialshare = picSocialshare;
             FirstCommit = comment;
             TagItem = tag;
-        }
-    }
-
-    public class BlogPostArea : IModelBlogPost
-    {
-        public string Title { get; set; }
-        public string User { get; set; }
-        public string Clock { get; set; }
-        public string Date { get; set; }
-        public string Pic { get; set; }
-        public string Context { get; set; }
-        public string[] ArrayContext { get; set; }
-
-        public BlogPostArea(string title, string user, string clock, string date, string pic, string[] context)
-        {
-            Title = title;
-            User = user;
-            Clock = clock;
-            Date = date;
-            Pic = pic;
-            ArrayContext = context;
-        }
-    }
-
-    public class Tag
-    {
-        public string[] Tags { get; set; }
-        public string Vots { get; set; }
-
-        public Tag(string[] tags, string vots)
-        {
-            Tags = tags;
-            Vots = vots;
         }
     }
 }

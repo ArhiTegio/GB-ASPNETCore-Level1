@@ -11,6 +11,8 @@
         public string Telephone { get; set; }
         public string BirthDay { get; set; }
 
+        public Employee() { }
+
         public  Employee(int id, string firstName, string surName, string patronymic, int age, string telephone, string birthDay)
         {
             this.Id = id;
