@@ -1,4 +1,6 @@
-﻿namespace WebStore.Models
+﻿using System;
+
+namespace WebStore.Models
 {
     public class Employee
     {
@@ -9,11 +11,11 @@
         public int Age { get; set; }
 
         public string Telephone { get; set; }
-        public string BirthDay { get; set; }
+        public DateTime BirthDay { get; set; }
 
         public Employee() { }
 
-        public  Employee(int id, string firstName, string surName, string patronymic, int age, string telephone, string birthDay)
+        public  Employee(int id, string firstName, string surName, string patronymic, int age, string telephone, DateTime birthDay)
         {
             this.Id = id;
             this.FirstName = firstName;

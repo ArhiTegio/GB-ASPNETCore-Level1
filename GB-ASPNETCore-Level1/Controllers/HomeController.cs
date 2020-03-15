@@ -83,9 +83,5 @@ namespace WebStore.Controllers
         public IActionResult ContactUs() => View();
 
         public IActionResult Login() => View();
-
-        public IActionResult Shop() => View(modelProductDetal);
-
-        public IActionResult ProductDetails() => View(modelProductDetal);
     }
 }

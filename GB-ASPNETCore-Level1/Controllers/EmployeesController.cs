@@ -139,6 +139,9 @@ namespace WebStore.Controllers
             if (employee is null)
                 throw new ArgumentNullException(nameof(EmployeeViewModel));
 
+            if(int.TryParse(employee.Name, out var name) || int.TryParse(employee.SecondName, out name) || int.TryParse(employee.Patronymic, out name))
+                ModelState.AddModelError(string.Empty, "Число не может быть фамилией, именем или отчеством!");
+
             if (!ModelState.IsValid)
                 return View(employee);
 
