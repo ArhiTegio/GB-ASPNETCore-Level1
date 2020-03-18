@@ -10,18 +10,23 @@ namespace WebStore.Infrastructure.Services
 {
     public class InMemoryEmplyeeData : IEmployeesData
     {
-        private readonly List<Employee> _Employees = TestData.LEmployees;
-        public IEnumerable<Employee> GetAll() => _Employees;
+        //класс-репозиторий напрямую обращается к контексту базы данных
+        private readonly AppDbContext context;
+        public InMemoryEmplyeeData(AppDbContext context)
+        {
+            this.context = context;
+        }
+        public IEnumerable<Employee> GetAll() => context.Employees;
 
-        public Employee GetById(int id) => _Employees.FirstOrDefault(x => x.Id == id);
+        public Employee GetById(int id) => context.Employees.FirstOrDefault(x => x.Id == id);
 
         public void Add(Employee employee)
         {
             if (employee is null)
                 throw new ArgumentException(nameof(Employee));
-            if (_Employees.Contains(employee)) return;
-            employee.Id = _Employees.Count == 0 ? 1 : _Employees.Max(e => e.Id) + 1;
-            _Employees.Add(employee);
+            if (context.Employees.Contains(employee)) return;
+            employee.Id = context.Employees.Count() == 0 ? 1 : context.Employees.Max(e => e.Id) + 1;
+            context.Employees.Add(employee);
         }
 
         public void Edit(int id, Employee employee)
@@ -29,7 +34,7 @@ namespace WebStore.Infrastructure.Services
             if(employee is null)
                 throw new ArgumentException(nameof(Employee));
 
-            if (_Employees.Contains(employee)) return;
+            if (context.Employees.Contains(employee)) return;
 
             var db_employee = GetById(id);
             if (db_employee is null)
@@ -50,13 +55,13 @@ namespace WebStore.Infrastructure.Services
             if (db_employee is null)
                 return false;
 
-            return _Employees.Remove(db_employee);
-
-
+            context.Employees.Remove(db_employee);
+            return true;
         }
 
         public void SaveChanges()
         {
+            context.SaveChanges();
         }
     }
 }

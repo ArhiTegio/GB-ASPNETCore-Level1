@@ -1,16 +1,16 @@
-﻿@model ModelProductDetal
+﻿@model IEnumerable<ProductViewModel>
 
 <div class="features_items">
     <!--features_items-->
     <h2 class="title text-center">Характеристики товара</h2>
 
-    @foreach (var product in Model.product)
+    @foreach (var product in Model)
     {
         <div class="col-sm-4">
             <div class="product-image-wrapper">
                 <div class="single-products">
                     <div class="productinfo text-center">
-                        <img src="~/images/shop/@product.Pic" alt="" />
+                        <img alt="" src="~/images/shop/@product.ImageUrl" />
                         <h2>@product.Price</h2>
                         <p>@product.Name</p>
                         <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Добавить в карзину</a>

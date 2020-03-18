@@ -1,11 +1,14 @@
+п»їusing System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Infrastructure.Services;
+using WebStore.Data;
 
 namespace WebStore
 {
@@ -17,15 +20,26 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
+                //@"Data Source=(local)\MSSQLLocalDB; Database=WebStore; Persist Security Info=False; MultipleActiveResultSets=True; Trusted_Connection=True;"
+                @"Data Source=(localdb)\MSSQLLocalDB;
+                Initial Catalog=WebStore;
+                Integrated Security=True;
+                Pooling=False"
+            ));
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-            //AddTransient - каждый раз будет создаваться экземпляр сервиса
-            //AddScoped - один экземпляр на область видимости 
+            //AddTransient - РєР°Р¶РґС‹Р№ СЂР°Р· Р±СѓРґРµС‚ СЃРѕР·РґР°РІР°С‚СЊСЃСЏ СЌРєР·РµРјРїР»СЏСЂ СЃРµСЂРІРёСЃР°
+            //AddScoped - РѕРґРёРЅ СЌРєР·РµРјРїР»СЏСЂ РЅР° РѕР±Р»Р°СЃС‚СЊ РІРёРґРёРјРѕСЃС‚Рё 
             //AddSingleton
-            services.AddSingleton<IEmployeesData, InMemoryEmplyeeData>();
+            services.AddTransient<IEmployeesData, InMemoryEmplyeeData>();
+            services.AddTransient<IProductData, InMemoryProductData>();
+
+  
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider sManeger)
         {
             if (env.IsDevelopment())
             {
