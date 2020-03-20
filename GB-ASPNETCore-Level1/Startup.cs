@@ -2,13 +2,18 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebStore.DAL.Context;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Infrastructure.Services;
 using WebStore.Data;
+using WebStore.DomainNew.Entities;
+using WebStore.Infrastructure.Services.InMemory;
+using WebStore.Infrastructure.Services.InSQL;
 
 namespace WebStore
 {
@@ -20,27 +25,63 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
-                //@"Data Source=(local)\MSSQLLocalDB; Database=WebStore; Persist Security Info=False; MultipleActiveResultSets=True; Trusted_Connection=True;"
-                @"Data Source=(localdb)\MSSQLLocalDB;
-                Initial Catalog=WebStore;
-                Integrated Security=True;
-                Pooling=False"
-            ));
+
+            services.AddDbContext<WebStoreDB>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<WebStoreDBInitializer>();
+
+            //services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
+            //    //@"Data Source=(local)\MSSQLLocalDB; Database=WebStore; Persist Security Info=False; MultipleActiveResultSets=True; Trusted_Connection=True;"
+            //    @"Data Source=(localdb)\MSSQLLocalDB;
+            //    Initial Catalog=WebStore;
+            //    Integrated Security=True;
+            //    Pooling=False"
+            //));
+
+            //services.AddIdentity<User, IdentityRole>()
+            //    .AddEntityFrameworkStores<WebStoreDB>()
+            //    .AddDefaultTokenProviders();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    // Password settings
+            //    options.Password.RequiredLength = 6;
+
+            //    // Lockout settings
+            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+            //    options.Lockout.MaxFailedAccessAttempts = 10;
+            //    options.Lockout.AllowedForNewUsers = true;
+
+            //    // User settings
+            //    options.User.RequireUniqueEmail = true;
+            //});
+
+            //services.ConfigureApplicationCookie(options =>
+            //{
+            //    // Cookie settings
+            //    options.Cookie.HttpOnly = true;
+            //    options.Cookie.Expiration = TimeSpan.FromDays(150);
+            //    options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+            //    options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
+            //    options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+            //    options.SlidingExpiration = true;
+            //});
 
             //AddTransient - каждый раз будет создаваться экземпляр сервиса
             //AddScoped - один экземпляр на область видимости 
             //AddSingleton
-            services.AddTransient<IEmployeesData, InMemoryEmplyeeData>();
-            services.AddTransient<IProductData, InMemoryProductData>();
-
-  
+            //services.AddTransient<IEmployeesData, InMemoryEmplyeeData>();
+            //services.AddTransient<IProductData, InMemoryProductData>();
+            services.AddScoped<ICustomerData, SqlCustomerData>();
+            services.AddScoped<IProductData, SqlProductData>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider sManeger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WebStoreDBInitializer db)
         {
+            db.Initialize();
+            //db.Products.Count();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -54,6 +95,10 @@ namespace WebStore
 
             app.UseRouting();
 
+            //Добавляем расширение для использования статических файлов, т.к. appsettings.json - это статический файл
+            //app.UseStaticFiles();
+            //app.UseAuthentication();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/greetings", async context =>
@@ -65,6 +110,7 @@ namespace WebStore
                     name: "default", 
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }

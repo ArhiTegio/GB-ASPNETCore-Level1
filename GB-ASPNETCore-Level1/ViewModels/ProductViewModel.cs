@@ -9,6 +9,6 @@ namespace WebStore.ViewModels
         public int Order { get; set; }
 
         public string ImageUrl { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
     }
 }
