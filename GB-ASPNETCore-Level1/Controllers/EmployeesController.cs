@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebStore.Data;
+using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Models;
 using WebStore.ViewModels;
@@ -14,13 +15,12 @@ namespace WebStore.Controllers
     //[Route("users")]
     public class EmployeesController : Controller
     {
-        private readonly IEmployeesData _EmployeesData;
-        public EmployeesController(IEmployeesData employeesData) => _EmployeesData = employeesData;
+        private readonly ICustomerData _CustomersData;
+        public EmployeesController(ICustomerData employeesData) => _CustomersData = employeesData;
 
-        private static readonly ModelEmployees __Employees = new ModelEmployees();
 
         //[Routing("employees")]
-        public IActionResult Index() => View(_EmployeesData.GetAll().Select(x => new EmployeeViewModel()
+        public IActionResult Index() => View(_CustomersData.GetAll().Select(x => new EmployeeViewModel()
         {
             Id = x.Id,
             Age = x.Age,
@@ -32,10 +32,10 @@ namespace WebStore.Controllers
         }));
 
         [HttpGet]
-        public IActionResult Details(Employee _employee)
+        public IActionResult Details(Customer _employee)
         {
 
-            var employee = _EmployeesData.GetById(_employee.Id);
+            var employee = _CustomersData.GetById(_employee.Id);
 
             if (employee is null)
                 return NotFound();
@@ -53,30 +53,30 @@ namespace WebStore.Controllers
 
         //[Route("employees/{Id}")]
         //[HttpPost]
-        //public IActionResult Details(Employee employee)
+        //public IActionResult Details(Employee customer)
         //{
         //    if (surName is null && firstName is null && patronymic is null && age is null && telephone is null &&
         //        birthDay is null && id != null && int.TryParse(id, out var _Id))
         //    {
-        //        TestData.Employees.Remove(_Id);
-        //        return View("Index", TestData.Employees);
+        //        TestData.dEmployees.Remove(_Id);
+        //        return View("Index", TestData.dEmployees);
         //    }
 
         //    if (int.TryParse(id, out var Id))
         //    {
-        //        if (TestData.Employees.TryGetValue(Id, out var employee))
+        //        if (TestData.dEmployees.TryGetValue(Id, out var customer))
         //        {
         //            if (int.TryParse(age, out var age_cheaked))
-        //                employee.Age = age_cheaked;
-        //            employee.SurName = surName;
-        //            employee.FirstName = firstName;
-        //            employee.Patronymic = patronymic;
-        //            employee.BirthDay = birthDay;
-        //            employee.Telephone = telephone;
+        //                customer.Age = age_cheaked;
+        //            customer.SurName = surName;
+        //            customer.FirstName = firstName;
+        //            customer.Patronymic = patronymic;
+        //            customer.BirthDay = birthDay;
+        //            customer.Telephone = telephone;
         //        }
 
-        //        return TestData.Employees.TryGetValue(Id, out var employee_)
-        //            ? View("Index", TestData.Employees)
+        //        return TestData.dEmployees.TryGetValue(Id, out var employee_)
+        //            ? View("Index", TestData.dEmployees)
         //            : (IActionResult)NotFound();
         //    }
         //    else
@@ -89,23 +89,26 @@ namespace WebStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(EmployeeViewModel employee)
+        public IActionResult Create(EmployeeViewModel customer)
         {
-            if (employee is null)
+            if (customer is null)
                 throw new ArgumentNullException(nameof(EmployeeViewModel));
 
             if (!ModelState.IsValid)
-                return View(employee);
-            _EmployeesData.Add(new Employee()
+                return View(customer);
+            _CustomersData.Add(new Customer()
             {
-                Age = employee.Age,
-                Telephone = employee.Telephone,
-                SurName = employee.SecondName,
-                FirstName = employee.Name,
-                BirthDay = employee.BirthDay,
-                Patronymic = employee.Patronymic,
+                Id = customer.Id,
+                Age = customer.Age,
+                Telephone = customer.Telephone,
+                SurName = customer.SecondName,
+                FirstName = customer.Name,
+                BirthDay = customer.BirthDay,
+                Patronymic = customer.Patronymic,
+                Login = customer.Login,
+                Password = customer.Password,
             });
-            _EmployeesData.SaveChanges();
+            _CustomersData.SaveChanges();
 
             return RedirectToAction("Index");
         }
@@ -116,58 +119,67 @@ namespace WebStore.Controllers
 
             if (id == 0) return BadRequest();
 
-            var employee = _EmployeesData.GetById(id.Value);
+            var customer = _CustomersData.GetById(id.Value);
 
-            if (employee is null)
+            if (customer is null)
                 return NotFound();
 
             return View(new EmployeeViewModel()
             {
-                Id = employee.Id,
-                Age = employee.Age,
-                Telephone = employee.Telephone,
-                SecondName = employee.SurName,
-                Name = employee.FirstName,
-                BirthDay = employee.BirthDay,
-                Patronymic = employee.Patronymic,
+                Id = customer.Id,
+                Age = customer.Age,
+                Telephone = customer.Telephone,
+                SecondName = customer.SurName,
+                Name = customer.FirstName,
+                BirthDay = customer.BirthDay,
+                Patronymic = customer.Patronymic,
+                Login = customer.Login,
+                Password = customer.Password,
             });
         }
 
         [HttpPost]
-        public IActionResult Edit(EmployeeViewModel employee)
+        public IActionResult Edit(EmployeeViewModel custumer)
         {
-            if (employee is null)
+            if (custumer is null)
                 throw new ArgumentNullException(nameof(EmployeeViewModel));
 
-            if(int.TryParse(employee.Name, out var name) || int.TryParse(employee.SecondName, out name) || int.TryParse(employee.Patronymic, out name))
+            if(int.TryParse(custumer.Name, out var name) || int.TryParse(custumer.SecondName, out name) || int.TryParse(custumer.Patronymic, out name))
                 ModelState.AddModelError(string.Empty, "Число не может быть фамилией, именем или отчеством!");
 
             if (!ModelState.IsValid)
-                return View(employee);
+                return View(custumer);
 
-            var id = employee.Id;
+            var id = custumer.Id;
             if(id > 0)
-                _EmployeesData.Add(new Employee()
+                _CustomersData.Add(new Customer()
                 {
-                    Age = employee.Age,
-                    Telephone = employee.Telephone,
-                    SurName = employee.SecondName,
-                    FirstName = employee.Name,
-                    BirthDay = employee.BirthDay,
-                    Patronymic = employee.Patronymic,
+                    Id = custumer.Id,
+                    Age = custumer.Age,
+                    Telephone = custumer.Telephone,
+                    SurName = custumer.SecondName,
+                    FirstName = custumer.Name,
+                    BirthDay = custumer.BirthDay,
+                    Patronymic = custumer.Patronymic,
+                    Login = custumer.Login,
+                    Password = custumer.Password,
+
                 });
             else
-                _EmployeesData.Edit(id, new Employee()
+                _CustomersData.Edit(id, new Customer()
                 {
-                    Age = employee.Age,
-                    Telephone = employee.Telephone,
-                    SurName = employee.SecondName,
-                    FirstName = employee.Name,
-                    BirthDay = employee.BirthDay,
-                    Patronymic = employee.Patronymic,
+                    Id = custumer.Id,
+                    Age = custumer.Age,
+                    Telephone = custumer.Telephone,
+                    SurName = custumer.SecondName,
+                    FirstName = custumer.Name,
+                    BirthDay = custumer.BirthDay,
+                    Patronymic = custumer.Patronymic,
+                    Login = custumer.Login,
+                    Password = custumer.Password,
                 });
 
-            _EmployeesData.SaveChanges();
+            _CustomersData.SaveChanges();
 
             return RedirectToAction("Index");
         }
@@ -176,7 +188,7 @@ namespace WebStore.Controllers
         {
             if (id <= 0)
                 return BadRequest();
-            var employee = _EmployeesData.GetById(id);
+            var employee = _CustomersData.GetById(id);
             if (employee is null)
                 return NotFound();
 
@@ -194,8 +206,8 @@ namespace WebStore.Controllers
 
         public IActionResult DeteleConfirned(int id)
         {
-            _EmployeesData.Delete(id);
-            _EmployeesData.SaveChanges();
+            _CustomersData.Delete(id);
+            _CustomersData.SaveChanges();
 
             return RedirectToAction("Index");
         }

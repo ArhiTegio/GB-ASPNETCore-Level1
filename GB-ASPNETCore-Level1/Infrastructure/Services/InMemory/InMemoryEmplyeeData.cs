@@ -1,32 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebStore.Data;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Models;
 
-namespace WebStore.Infrastructure.Services
+namespace WebStore.Infrastructure.Services.InMemory
 {
     public class InMemoryEmplyeeData : IEmployeesData
     {
         //класс-репозиторий напрямую обращается к контексту базы данных
-        private readonly AppDbContext context;
-        public InMemoryEmplyeeData(AppDbContext context)
-        {
-            this.context = context;
-        }
-        public IEnumerable<Employee> GetAll() => context.Employees;
+        //private readonly AppDbContext context;
+        //public InMemoryEmplyeeData(AppDbContext context)
+        //{
+        //    this.context = context;
+        //}
+        public IEnumerable<Employee> GetAll() => TestData.Employees;
 
-        public Employee GetById(int id) => context.Employees.FirstOrDefault(x => x.Id == id);
+        public Employee GetById(int id) => TestData.Employees.FirstOrDefault(x => x.Id == id);
 
         public void Add(Employee employee)
         {
             if (employee is null)
                 throw new ArgumentException(nameof(Employee));
-            if (context.Employees.Contains(employee)) return;
-            employee.Id = context.Employees.Count() == 0 ? 1 : context.Employees.Max(e => e.Id) + 1;
-            context.Employees.Add(employee);
+            if (TestData.Employees.Contains(employee)) return;
+            employee.Id = TestData.Employees.Count() == 0 ? 1 : TestData.Employees.Max(e => e.Id) + 1;
+            TestData.Employees.Add(employee);
         }
 
         public void Edit(int id, Employee employee)
@@ -34,7 +33,7 @@ namespace WebStore.Infrastructure.Services
             if(employee is null)
                 throw new ArgumentException(nameof(Employee));
 
-            if (context.Employees.Contains(employee)) return;
+            if (TestData.Employees.Contains(employee)) return;
 
             var db_employee = GetById(id);
             if (db_employee is null)
@@ -55,13 +54,13 @@ namespace WebStore.Infrastructure.Services
             if (db_employee is null)
                 return false;
 
-            context.Employees.Remove(db_employee);
+            TestData.Employees.Remove(db_employee);
             return true;
         }
 
         public void SaveChanges()
         {
-            context.SaveChanges();
+            //TestData.SaveChanges();
         }
     }
 }

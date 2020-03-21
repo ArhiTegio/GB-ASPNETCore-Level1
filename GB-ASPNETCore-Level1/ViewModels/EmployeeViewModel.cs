@@ -40,5 +40,14 @@ namespace WebStore.ViewModels
         [Display(Name = "День рождения")]
         [Required(ErrorMessage = "День рождение является обязательным")]
         public DateTime BirthDay { get; set; }
+
+        [Display(Name = "Логин")]
+        [Required(ErrorMessage = "Логин обязателено заполнить")]
+        [MinLength(11, ErrorMessage = "Минимальная длина 5")]
+        public string Login { get; set; }
+
+        [Display(Name = "Пароль")]
+        [Required(ErrorMessage = "Пароль является обязательным")]
+        public string Password { get; set; }
     }
 }
