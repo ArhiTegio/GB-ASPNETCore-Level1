@@ -5,22 +5,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebStore.ViewModels
+namespace WebStore.ViewModels.Identity
 {
     public class LoginViewModel
     {
-
-        [HiddenInput(DisplayValue = false)]
-        public int Id { get; set; }
-
-        [Display(Name = "Логин")]
+        [Required]
+        [MaxLength(256)]
+        [Display(Name = "Имя пользователя")]
         public string UserName { get; set; }
 
+        [Required]
+        [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 
-        [Display(Name = "Запомнить меня")]
+        [Display(Name = "Запомнить меня!")]
         public bool RememberMe { get; set; }
-        public string ReturnUrl { get; internal set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public string ReturnUrl { get; set; }
     }
 }

@@ -1,86 +1,80 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.DomainNew.Entities;
-using WebStore.Models.Account;
-using WebStore.ViewModels;
+using WebStore.Domain.Entities.Identity;
+using WebStore.ViewModels.Identity;
+using RegisterUserViewModel = WebStore.ViewModels.Identity.RegisterUserViewModel;
 
 namespace WebStore.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _UseManager;
+        private readonly SignInManager<User> _SignInManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> UseManager, SignInManager<User> SignInManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _UseManager = UseManager;
+            _SignInManager = SignInManager;
         }
 
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View(new LoginViewModel());
-        }
+        public IActionResult Register() => View(new RegisterUserViewModel());
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Register(RegisterUserViewModel Model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(Model);
+            var user = new User
             {
-                var loginResult = await _signInManager.PasswordSignInAsync(model.UserName,
-                    model.Password,
-                    model.RememberMe,
-                    lockoutOnFailure: false);//Проверяем логин/пароль пользователя
-
-                if (loginResult.Succeeded)//если проверка успешна
-                {
-                    if (Url.IsLocalUrl(model.ReturnUrl))//и returnUrl - локальный
-                    {
-                        return Redirect(model.ReturnUrl);//перенаправляем туда, откуда пришли
-                    }
-
-                    return RedirectToAction("Index", "Home");//иначе на главную
-                }
-
-            }
-            ModelState.AddModelError("", "Вход невозможен");//говорим пользователю, что вход невозможен
-            return View(model);
-        }
-
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View(new RegisterUserViewModel());
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterUserViewModel model)
-        {
-            if (!ModelState.IsValid) return View(model);
-
-            var user = new User { UserName = model.UserName, Email = model.Email };//создаем сущность пользователь
-            var createResult = await _userManager.CreateAsync(user, model.Password);//используем менеджер для создания
-            if (createResult.Succeeded)
+                UserName = Model.UserName
+            };
+            user.Id = Guid.NewGuid().ToString();
+            var register_result = await _UseManager.CreateAsync(user, Model.Password);
+            if (register_result.Succeeded)
             {
-                await _signInManager.SignInAsync(user, false);//если успешно - производим логин
+                await _SignInManager.SignInAsync(user, false);
                 return RedirectToAction("Index", "Home");
             }
 
-            foreach (var identityError in createResult.Errors)//выводим ошибки
+            foreach (var error in register_result.Errors)
             {
-                ModelState.AddModelError("", identityError.Description);
+                ModelState.AddModelError(string.Empty, error.Description);
             }
-            return View(model);
+
+            return View(Model);
         }
+
+        public IActionResult Login(string ReturnUrl) => View(new LoginViewModel { ReturnUrl = ReturnUrl });
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Login(LoginViewModel Model)
         {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            if (!ModelState.IsValid) return View(Model);
+
+            var login_result = await _SignInManager.PasswordSignInAsync(
+                Model.UserName,
+                Model.Password,
+                Model.RememberMe,
+                false);
+            if (login_result.Succeeded)
+            {
+                if (Url.IsLocalUrl(Model.ReturnUrl))
+                    return Redirect(Model.ReturnUrl);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError(string.Empty, "Неверное имя пользователя или пароль");
+
+            return View(Model);
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            _SignInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
