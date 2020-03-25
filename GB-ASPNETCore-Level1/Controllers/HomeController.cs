@@ -81,7 +81,5 @@ namespace WebStore.Controllers
         public IActionResult CheckOut() => View(modelCart);
 
         public IActionResult ContactUs() => View();
-
-        public IActionResult Login() => View();
     }
 }
