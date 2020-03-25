@@ -30,7 +30,7 @@ namespace WebStore.Controllers
             {
                 UserName = Model.UserName
             };
-            user.Id = Guid.NewGuid().ToString();
+
             var register_result = await _UseManager.CreateAsync(user, Model.Password);
             if (register_result.Succeeded)
             {
