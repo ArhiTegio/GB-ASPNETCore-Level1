@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebStore.Data;
 using WebStore.Domain.Entities;
+using WebStore.Domain.Entities.Identity;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Models;
 using WebStore.ViewModels;
@@ -13,6 +15,7 @@ using WebStore.ViewModels;
 namespace WebStore.Controllers
 {
     //[Route("users")]
+    [Authorize]
     public class EmployeesController : Controller
     {
         private readonly ICustomerData _CustomersData;
@@ -49,7 +52,7 @@ namespace WebStore.Controllers
                 BirthDay = employee.BirthDay,
                 Patronymic = employee.Patronymic,
             });
-        } 
+        }
 
         //[Route("employees/{Id}")]
         //[HttpPost]
@@ -82,13 +85,14 @@ namespace WebStore.Controllers
         //    else
         //        return (IActionResult)NotFound();
         //}
-
+        [Authorize(Roles = Role.Administrator)]
         public IActionResult Create()
         {
             return View(new EmployeeViewModel());
         }
 
-        [HttpPost]
+        [Authorize(Roles = Role.Administrator)]
+        [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Create(EmployeeViewModel customer)
         {
             if (customer is null)
@@ -113,6 +117,7 @@ namespace WebStore.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = Role.Administrator)]
         public IActionResult Edit(int? id)
         {
             if (id is null) return View(new EmployeeViewModel());
@@ -138,7 +143,8 @@ namespace WebStore.Controllers
             });
         }
 
-        [HttpPost]
+        [Authorize(Roles = Role.Administrator)]
+        [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Edit(EmployeeViewModel custumer)
         {
             if (custumer is null)
@@ -184,6 +190,7 @@ namespace WebStore.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = Role.Administrator)]
         public IActionResult Delete(int id)
         {
             if (id <= 0)
@@ -204,6 +211,7 @@ namespace WebStore.Controllers
             });
         }
 
+        [Authorize(Roles = Role.Administrator)]
         public IActionResult DeteleConfirned(int id)
         {
             _CustomersData.Delete(id);

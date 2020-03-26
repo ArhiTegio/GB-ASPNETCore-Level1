@@ -76,8 +76,6 @@ namespace WebStore.Controllers
 
         public IActionResult BlogSingle() => View(modelBlogSingle);
 
-        public IActionResult Cart() => View(modelCart);
-
         public IActionResult CheckOut() => View(modelCart);
 
         public IActionResult ContactUs() => View();

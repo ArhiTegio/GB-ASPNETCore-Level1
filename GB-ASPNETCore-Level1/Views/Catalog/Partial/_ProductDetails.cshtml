@@ -1,4 +1,4 @@
-﻿
+﻿@model ProductViewModel
 <div class="product-details">
     <!--product-details-->
     <div class="col-sm-5">
@@ -9,7 +9,7 @@
         <div id="similar-product" class="carousel slide" data-ride="carousel">
 
             <partial name="Partial/_WrapperForSlides" />
-            
+
             <partial name="Partial/_Controls" />
             <!-- Controls -->
             <a class="left item-control" href="#similar-product" data-slide="prev">
@@ -22,6 +22,6 @@
 
     </div>
     <div class="col-sm-7">
-        <partial name="Partial/_ProductInformation"/>
+        <partial name="Partial/_ProductInformation" model="@Model" />
     </div>
 </div><!--/product-details-->
