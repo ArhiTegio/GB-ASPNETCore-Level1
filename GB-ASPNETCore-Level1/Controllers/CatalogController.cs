@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Interfaces;
+using WebStore.Infrastructure.Mapping;
 using WebStore.ViewModels;
 
 namespace WebStore.Controllers
@@ -34,6 +35,13 @@ namespace WebStore.Controllers
             return View(answer);
         }
 
-        public IActionResult ProductDetails() => View();
+        public IActionResult ProductDetails(int id)
+        {
+            var product = _productData.GetProductById(id);
+            if (product is null)
+                return NotFound();
+
+            return View(product.ToView());
+        }
     }
 }

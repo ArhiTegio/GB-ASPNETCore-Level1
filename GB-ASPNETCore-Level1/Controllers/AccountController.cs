@@ -30,13 +30,18 @@ namespace WebStore.Controllers
             {
                 UserName = Model.UserName
             };
-            user.Id = Guid.NewGuid().ToString();
+
             var register_result = await _UseManager.CreateAsync(user, Model.Password);
             if (register_result.Succeeded)
             {
+                await _UseManager.AddToRoleAsync(user, Role.User);
+
                 await _SignInManager.SignInAsync(user, false);
                 return RedirectToAction("Index", "Home");
             }
+
+
+
 
             foreach (var error in register_result.Errors)
             {

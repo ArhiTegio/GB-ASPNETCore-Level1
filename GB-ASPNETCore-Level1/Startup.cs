@@ -12,6 +12,7 @@ using WebStore.Infrastructure.Interfaces;
 using WebStore.Infrastructure.Services;
 using WebStore.Data;
 using WebStore.Domain.Entities.Identity;
+using WebStore.Infrastructure.Services.InCookies;
 using WebStore.Infrastructure.Services.InMemory;
 using WebStore.Infrastructure.Services.InSQL;
 
@@ -110,6 +111,7 @@ namespace WebStore
             //services.AddTransient<IProductData, InMemoryProductData>();
             services.AddScoped<ICustomerData, SqlCustomerData>();
             services.AddScoped<IProductData, SqlProductData>();
+            services.AddScoped<ICartService, CookiesCartService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WebStoreDBInitializer db)
@@ -125,11 +127,13 @@ namespace WebStore
             app.UseStaticFiles();
             app.UseDefaultFiles();
 
+            app.UseRouting();
+
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseWelcomePage("/welcome");
 
-            app.UseRouting();
 
             //Добавляем расширение для использования статических файлов, т.к. appsettings.json - это статический файл
             //app.UseStaticFiles();

@@ -20,6 +20,8 @@ namespace WebStore.Infrastructure.Services
             .Where(product => Filter == null || (Filter.SectionId == null || product.SectionId == Filter.SectionId))
             .Where(product => Filter == null || (Filter.BrandId == null || product.BrandId == Filter.BrandId));
 
+        public Product GetProductById(int id) => TestData.Products.FirstOrDefault(p => p.Id == id);
+
         public void SaveChanges()
         {
             //TestData.SaveChangesAsync();

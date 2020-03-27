@@ -1,4 +1,7 @@
-﻿@model ModelProductDetal
+﻿@model ProductViewModel
+@{
+    ViewData["Title"] = $"Товар {Model.Name}";
+}
 
 <section>
     <div class="container">
@@ -8,11 +11,11 @@
             </div>
 
             <div class="col-sm-9 padding-right">
-                <partial name="Partial/_ProductDetails" model="Model"/>
+                <partial name="Partial/_ProductDetails" model="@Model"/>
                 
-                <partial name="Partial/_CategoryTab" model="Model"/>
+                <partial name="Partial/_CategoryTab" model="@Model"/>
 
-                <partial name="Partial/_RecomendedItems" model="Model"/>
+                <partial name="Partial/_RecomendedItems" model="@Model"/>
 
             </div>
         </div>
