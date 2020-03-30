@@ -106,17 +106,21 @@ namespace WebStore.Infrastructure.Services.InCookies
 
         public CartViewModel TransformFromCart()
         {
-            var product = _productData.GetProducts(new ProductFilter
-            {
-                Ids = CartUser.Items.Select(item => item.ProductId).ToList()
-            });
+            var product = _productData
+                .GetProducts(new ProductFilter
+                {
+                    Ids = CartUser.Items.Select(item => item.ProductId).ToList()
+                })
+                .ToView()
+                .ToDictionary(p => p.Id);
 
-            var product_vm = product.ToView();
             return new CartViewModel
             {
-                Items = CartUser.Items.ToDictionary(
-                    item => product_vm.First(p => p.Id == item.ProductId),
-                item => item.Quantity)
+                Items = CartUser.Items
+                    .Where(item => product.ContainsKey(item.ProductId))
+                    .ToDictionary(
+                    item => product[item.ProductId],
+                    item => item.Quantity)
             };
         }
     }
